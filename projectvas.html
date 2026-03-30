@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum - Master Your Life, One Day at a Time</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Bebas+Neue&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            --danger-gradient: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+            --warning-gradient: linear-gradient(135deg, #ed8936 0%, #c05621 100%);
+            --info-gradient: linear-gradient(135deg, #4299e1 0%, #2c5aa0 100%);
+            --light: #f7fafc;
+            --dark: #1a202c;
+            --border: #e2e8f0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 42px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: #718096;
+            margin: 5px 0 0 0;
+            font-weight: 500;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 14px 28px;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            background: white;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-btn i {
+            font-size: 18px;
+        }
+
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f4f8;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            font-size: 24px;
+        }
+
+        .icon-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .habit-item {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #cbd5e0;
+            transition: all 0.3s ease;
+        }
+
+        .habit-item:hover {
+            transform: translateX(5px);
+        }
+
+        .habit-item.completed {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.15) 0%, rgba(56, 161, 105, 0.1) 100%);
+            border-left-color: #48bb78;
+        }
+
+        .habit-name {
+            font-weight: 700;
+            flex: 1;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #fed7d7 0%, #fbb6ce 100%);
+            color: #c53030;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .checkbox {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 3px solid #cbd5e0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .checkbox:hover {
+            transform: scale(1.15);
+            border-color: #667eea;
+        }
+
+        .checkbox.checked {
+            background: var(--success-gradient);
+            border-color: #48bb78;
+            color: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-group input,
+        .input-group select {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger-gradient);
+            color: white;
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            transform: scale(1.1);
+        }
+
+        .stat-card {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .stat-card.success {
+            background: var(--success-gradient);
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+        }
+
+        .stat-card.warning {
+            background: var(--warning-gradient);
+            box-shadow: 0 10px 30px rgba(237, 137, 54, 0.3);
+        }
+
+        .stat-card.danger {
+            background: var(--danger-gradient);
+            box-shadow: 0 10px 30px rgba(245, 101, 101, 0.3);
+        }
+
+        .stat-card.info {
+            background: var(--info-gradient);
+            box-shadow: 0 10px 30px rgba(66, 153, 225, 0.3);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 12px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .water-reminder {
+            background: linear-gradient(135deg, #4299e1 0%, #2d98da 50%, #1c7ed6 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(66, 153, 225, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .water-reminder::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .water-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .water-counter {
+            font-size: 56px;
+            font-weight: 800;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .water-progress {
+            background: rgba(255,255,255,0.25);
+            border-radius: 15px;
+            height: 40px;
+            margin: 25px 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .water-fill {
+            background: rgba(255,255,255,0.9);
+            height: 100%;
+            transition: width 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d98da;
+            font-weight: 800;
+            font-size: 13px;
+            border-radius: 13px;
+        }
+
+        .finance-item {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #fbb6ce;
+            transition: all 0.3s ease;
+        }
+
+        .finance-item:hover {
+            transform: translateX(5px);
+        }
+
+        .finance-item.income {
+            border-left-color: #48bb78;
+        }
+
+        .finance-category {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .category-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+        }
+
+        .finance-amount {
+            font-weight: 800;
+            font-size: 16px;
+            color: #2d3748;
+        }
+
+        .finance-amount.income {
+            color: #48bb78;
+        }
+
+        .finance-amount.expense {
+            color: #f56565;
+        }
+
+        .task-item {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 5px solid #4299e1;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+        }
+
+        .task-item.done {
+            opacity: 0.7;
+            background: linear-gradient(135deg, rgba(200, 200, 200, 0.15), rgba(180, 180, 180, 0.1));
+        }
+
+        .task-item.done .task-text {
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        .task-check {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 3px solid #cbd5e0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .task-check:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .task-check.done {
+            background: var(--success-gradient);
+            border-color: #48bb78;
+            color: white;
+        }
+
+        .task-text {
+            flex: 1;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .task-priority {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .task-priority.high {
+            background: rgba(245, 101, 101, 0.15);
+            color: #f56565;
+        }
+
+        .task-priority.medium {
+            background: rgba(237, 137, 54, 0.15);
+            color: #ed8936;
+        }
+
+        .task-priority.low {
+            background: rgba(72, 187, 120, 0.15);
+            color: #48bb78;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-state i {
+            font-size: 56px;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 25px 0;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 200px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+        }
+
+        .review-section {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e6f0ff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .review-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .review-label {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .review-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .review-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .review-bar-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: 700;
+            color: #718096;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            color: #2d3748;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 25px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .tab-buttons {
+                justify-content: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-icon">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <div class="header-title">
+                        <h1>MOMENTUM</h1>
+                        <p>Master Your Life, One Day at a Time</p>
+                    </div>
+                </div>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="habits"><i class="fas fa-check-circle"></i> Habits</button>
+                    <button class="tab-btn" data-tab="tasks"><i class="fas fa-tasks"></i> Tasks</button>
+                    <button class="tab-btn" data-tab="finance"><i class="fas fa-chart-pie"></i> Finance</button>
+                    <button class="tab-btn" data-tab="water"><i class="fas fa-droplet"></i> Water</button>
+                    <button class="tab-btn" data-tab="review"><i class="fas fa-calendar-alt"></i> Review</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Habits Tab -->
+        <div id="habits" class="content active">
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-fire" style="color: #ff6b35;"></i>Daily Habits
+                        </div>
+                        <div class="icon-badge" style="background: linear-gradient(135deg, #ff6b35, #f93105); color: white;">
+                            <i class="fas fa-flame"></i>
+                        </div>
+                    </div>
+                    <div id="habits-list"></div>
+                    <div class="input-group">
+                        <input type="text" id="habit-input" placeholder="Add a new habit...">
+                        <button class="btn btn-primary" onclick="addHabit()"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-chart-bar" style="color: #667eea;"></i>Your Progress
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-fire" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="habit-streak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                    <div class="stat-card success">
+                        <i class="fas fa-star" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="habit-completion">0%</div>
+                        <div class="stat-label">Today's Completion</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <i class="fas fa-target" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="total-habits">0</div>
+                        <div class="stat-label">Total Habits</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="content">
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-list-check" style="color: #667eea;"></i>To-Do List
+                        </div>
+                        <div class="icon-badge" style="background: var(--primary-gradient); color: white;">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                    </div>
+                    <div id="tasks-list"></div>
+                    <div class="input-group">
+                        <input type="text" id="task-input" placeholder="Add a task...">
+                        <select id="task-priority">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="addTask()"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-trophy" style="color: #fbbf24;"></i>Task Stats
+                        </div>
+                    </div>
+                    <div class="stat-card info">
+                        <i class="fas fa-check" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="tasks-completed">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <i class="fas fa-hourglass-end" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="tasks-pending">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance Tab -->
+        <div id="finance" class="content">
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-credit-card" style="color: #48bb78;"></i>Transactions
+                        </div>
+                        <div class="icon-badge" style="background: var(--success-gradient); color: white;">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div id="finance-list"></div>
+                    <div style="margin-top: 20px;">
+                        <div class="input-group">
+                            <input type="number" id="finance-amount" placeholder="Amount" style="width: 120px;">
+                            <input type="text" id="finance-category" placeholder="Category" style="flex: 1;">
+                            <select id="finance-type">
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="addFinance()"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-pie-chart" style="color: #667eea;"></i>Distribution
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-calculator" style="color: #ed8936;"></i>Summary
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <i class="fas fa-arrow-down" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="total-expenses">₹0</div>
+                        <div class="stat-label">Total Expenses</div>
+                    </div>
+                    <div class="stat-card success">
+                        <i class="fas fa-arrow-up" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="total-income">₹0</div>
+                        <div class="stat-label">Total Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-piggy-bank" style="font-size: 32px;"></i>
+                        <div class="stat-number" id="net-balance">₹0</div>
+                        <div class="stat-label">Net Balance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Water Tab -->
+        <div id="water" class="content">
+            <div class="grid">
+                <div class="card">
+                    <div class="water-reminder">
+                        <div class="water-icon">💧</div>
+                        <div class="water-counter" id="water-count">0</div>
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 20px;">Cups of Water Today</div>
+                        <div class="water-progress">
+                            <div class="water-fill" id="water-fill" style="width: 0%;">0%</div>
+                        </div>
+                        <div style="margin-top: 20px; display: flex; gap: 12px;">
+                            <button class="btn btn-primary" onclick="addWater()" style="flex: 1; background: rgba(255,255,255,0.25); border: 2px solid white;">
+                                <i class="fas fa-plus"></i> Add Cup
+                            </button>
+                            <button class="btn btn-primary" onclick="resetWater()" style="flex: 1; background: rgba(255,255,255,0.25); border: 2px solid white;">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-lightbulb" style="color: #fbbf24;"></i>Hydration Tips
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 15px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.1)); border-radius: 12px; border-left: 4px solid #fbbf24;">
+                            <strong style="color: #2d3748;">💪 Daily Goal</strong>
+                            <p style="font-size: 14px; margin-top: 8px; color: #718096;">Drink 8 cups (2 liters) of water daily for optimal health</p>
+                        </div>
+                        <div style="padding: 15px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(56, 161, 105, 0.1)); border-radius: 12px; border-left: 4px solid #48bb78;">
+                            <strong style="color: #2d3748;">🕐 Best Times</strong>
+                            <p style="font-size: 14px; margin-top: 8px; color: #718096;">Morning, before meals, after exercise, and before bed</p>
+                        </div>
+                        <div style="padding: 15px; background: linear-gradient(135deg, rgba(233, 30, 99, 0.15), rgba(194, 24, 91, 0.1)); border-radius: 12px; border-left: 4px solid #f56565;">
+                            <strong style="color: #2d3748;">✨ Health Benefits</strong>
+                            <p style="font-size: 14px; margin-top: 8px; color: #718096;">Improves energy, skin, digestion, and cognitive function</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Review Tab -->
+        <div id="review" class="content">
+            <div class="grid">
+                <div style="grid-column: 1 / -1;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fas fa-calendar-check" style="color: #667eea;"></i>Monthly Review Dashboard
+                            </div>
+                            <button class="btn btn-primary" onclick="generateReview()"><i class="fas fa-sync-alt"></i> Generate Report</button>
+                        </div>
+                        <div id="review-content" style="margin-top: 25px;">
+                            <p style="text-align: center; color: #a0aec0; font-size: 16px; padding: 30px;">Click "Generate Report" to create your monthly review</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        const app = {
+            habits: JSON.parse(localStorage.getItem('habits')) || [],
+            tasks: JSON.parse(localStorage.getItem('tasks')) || [],
+            finances: JSON.parse(localStorage.getItem('finances')) || [],
+            water: JSON.parse(localStorage.getItem('water')) || { count: 0, date: new Date().toDateString() },
+            financeChart: null,
+
+            save() {
+                localStorage.setItem('habits', JSON.stringify(this.habits));
+                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+                localStorage.setItem('finances', JSON.stringify(this.finances));
+                localStorage.setItem('water', JSON.stringify(this.water));
+            }
+        };
+
+        // Tab Navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+                
+                if (btn.dataset.tab === 'finance') {
+                    setTimeout(() => updateFinanceChart(), 100);
+                }
+            });
+        });
+
+        // ===== HABITS FUNCTIONS =====
+        function addHabit() {
+            const input = document.getElementById('habit-input');
+            if (input.value.trim()) {
+                app.habits.push({
+                    id: Date.now(),
+                    name: input.value,
+                    completed: false,
+                    streak: 0,
+                    date: new Date().toDateString()
+                });
+                app.save();
+                input.value = '';
+                renderHabits();
+            }
+        }
+
+        function toggleHabit(id) {
+            const habit = app.habits.find(h => h.id === id);
+            if (habit) {
+                habit.completed = !habit.completed;
+                if (habit.completed) habit.streak++;
+                app.save();
+                renderHabits();
+            }
+        }
+
+        function deleteHabit(id) {
+            app.habits = app.habits.filter(h => h.id !== id);
+            app.save();
+            renderHabits();
+        }
+
+        function renderHabits() {
+            const list = document.getElementById('habits-list');
+            list.innerHTML = '';
+
+            if (app.habits.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-target"></i><p>No habits yet. Start building one!</p></div>';
+                document.getElementById('habit-streak').textContent = '0';
+                document.getElementById('habit-completion').textContent = '0%';
+                document.getElementById('total-habits').textContent = '0';
+                return;
+            }
+
+            app.habits.forEach(habit => {
+                const completed = habit.completed;
+                list.innerHTML += `
+                    <div class="habit-item ${completed ? 'completed' : ''}">
+                        <div class="habit-name">${habit.name}</div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            ${habit.streak > 0 ? `<span class="streak-badge">🔥 ${habit.streak}</span>` : ''}
+                            <div class="checkbox ${completed ? 'checked' : ''}" onclick="toggleHabit(${habit.id})">
+                                ${completed ? '<i class="fas fa-check"></i>' : ''}
+                            </div>
+                            <button class="btn btn-danger" onclick="deleteHabit(${habit.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const maxStreak = Math.max(...app.habits.map(h => h.streak), 0);
+            const completedToday = app.habits.filter(h => h.completed).length;
+            const completion = app.habits.length > 0 ? Math.round((completedToday / app.habits.length) * 100) : 0;
+
+            document.getElementById('habit-streak').textContent = maxStreak;
+            document.getElementById('habit-completion').textContent = completion + '%';
+            document.getElementById('total-habits').textContent = a
